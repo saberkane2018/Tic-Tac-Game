@@ -1,6 +1,6 @@
 #include"Player.h"
 
-Player::Player(string n, char s, Board* b){
+Player::Player(string n, string s, Board* b){
   name =n;
   symbol =s;
   playerBoard =b;
@@ -8,20 +8,20 @@ Player::Player(string n, char s, Board* b){
 
 
 char Player::GetSymbol(){
-  return symbol;
+  return symbol[0];
 }
 
 string Player::GetName(){
   return name;
 }
 
-void Player::Play(){
+bool Player::Play(){
   char choice;
   cout << "\n " << name << " might choose a number : ";
   cin >> choice;
 
-  playerBoard->SetValue(choice, symbol);
-
+  bool changePlayer = playerBoard->SetValue(choice, GetSymbol());
+  return changePlayer;
 }
 
 bool Player::Win(){
@@ -29,26 +29,39 @@ bool Player::Win(){
   bool VerticalResult;
   bool DiagResult = true;
   bool AntiDiagResult = true;
-
+  int H =0;
+  int V =0;
+  // This serves for horizontal and vertical checking
   for (int i = 0; i < 3; i++) {
     HorizontalResult = true;
     VerticalResult = true;
-    for (int j = 0; j < 3; j++) {
-      // this part checks of we dont have any sucess in rows and columns
-      HorizontalResult &= ((*playerBoard).board[i][j]== symbol);
-      VerticalResult &= ((*playerBoard).board[j][i]== symbol);
-
+    for (int j = H; j < H + 3; j++){
+      HorizontalResult &= ((*playerBoard).GetBoard()[j].GetValue()== GetSymbol() &&(*playerBoard).GetBoard()[j].GetChange()== true );
+    }
+    for (int j = V; j < V + 7; j= j+3){
+      VerticalResult &= ((*playerBoard).GetBoard()[j].GetValue()== GetSymbol() &&(*playerBoard).GetBoard()[j].GetChange()== true );
     }
 
+    H += 3;
+    V += 1;
     if(HorizontalResult || VerticalResult)
       return true;
-    //This part checks if we dont have any sucesss for the diagonal and anti diagonal
-    DiagResult &= ((*playerBoard).board[i][i]== symbol);
-    AntiDiagResult &= ((*playerBoard).board[2-i][i]== symbol);
   }
+  // this serves for diagonal and antidiagonal checking
+  DiagResult = true;
+  AntiDiagResult = true;
+  for (int j = 0; j < 9; j = j+4){
+    DiagResult &= ((*playerBoard).GetBoard()[j].GetValue()== GetSymbol() &&(*playerBoard).GetBoard()[j].GetChange()== true );
+  }
+  for (int j = 2; j < 7; j= j+2){
+    AntiDiagResult &= ((*playerBoard).GetBoard()[j].GetValue()== GetSymbol() &&(*playerBoard).GetBoard()[j].GetChange()== true );
+  }
+
   if(DiagResult || AntiDiagResult)
     return true;
 
+
   return false;
+
 
 }

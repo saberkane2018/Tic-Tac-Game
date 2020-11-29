@@ -1,19 +1,19 @@
 #include"Board.h"
 
 Board::Board(){
-  char symbol1, symbol2;
+  string symbol1, symbol2;
   string name1, name2;
 
   cout<< "what is the name of the first player : ";
   cin>>name1;
 
-  cout<< "what is the symbol of the first player : ";
-  cin>>symbol1;
+  cout<< "\nwhat is the symbol of the first player : ";
+  cin>> symbol1;
 
-  cout<< "what is the name of the second player : ";
+  cout<< "\nwhat is the name of the second player : ";
   cin>>name2;
 
-  cout<< "what is the symbol of the second player : ";
+  cout<< "\nwhat is the symbol of the second player : ";
   cin>>symbol2;
 
   Player player1(name1, symbol1, this);
@@ -22,25 +22,33 @@ Board::Board(){
 
   players.push_back(player1);
   players.push_back(player2);
+
+  for (int i = 1; i < 10; i++) {
+    char c = '0' + i;
+    GameBoard.push_back(Cell(c,false));
+  }
+}
+
+vector<Cell> Board::GetBoard(){
+  return GameBoard;
 }
 
 void Board::Draw(){
-
+  int k = 0;
   for (int i = 0; i < 3; i++) {
-    for (int j = 0; j < 3; j++) {
-      cout << " " << board[i][j] << " |" ;
+    for (int j = k; j < k + 3; j++) {
+      cout << " " << GameBoard[j].GetValue() << " |" ;
     }
     cout <<endl;
+    k += 3;
   }
 
 }
 
 bool Board::EndGame(){
-  for (int i = 0; i < 3; i++) {
-    for (int j = 0; j < 3; j++) {
-        if(board[i][j] != players[0].GetSymbol() && board[i][j] != players[1].GetSymbol()){
-          return true;
-        }
+  for (int i = 0; i < 9; i++) {
+    if(GameBoard[i].GetChange() == false){
+      return true;
     }
   }
   cout<< "\nEnd of Game" << endl;
@@ -55,15 +63,16 @@ Player Board::TogglePlayer(Player player){
         return players[0];
 }
 
-void Board::SetValue(char initvalue, char value){
-
-  for (int i = 0; i < 3; i++) {
-    for (int j = 0; j < 3; j++) {
-        if(board[i][j] == initvalue){
-          board[i][j] = value;
-        }
+bool Board::SetValue(char initvalue, char value){
+  bool valueSet = false;
+  for (int i = 0; i < 9; i++) {
+    if(GameBoard[i].GetValue() == initvalue && GameBoard[i].GetChange() == false){
+        GameBoard[i].SetValue(value);
+        GameBoard[i].SetChange(true);
+        valueSet = true;
     }
   }
+  return valueSet;
 
 }
 

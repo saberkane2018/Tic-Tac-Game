@@ -12,15 +12,15 @@ using namespace std;
   class Player{
     private:
       string name;
-      char symbol;
+      string symbol;
       Board* playerBoard;
 
     public:
 
-      Player(string n, char s, Board* b);
+      Player(string n, string s, Board* b);
       char GetSymbol();
       string GetName();
-      void Play();
+      bool Play();
       bool Win();
 
 

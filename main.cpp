@@ -11,6 +11,7 @@ int main() {
     Board Game;
     Player player = Game.GetPlayer(1);// used for toggling between players
     bool cont = true;// the game will continue while this value is true
+    bool changePlayer;
 
 
     cout<< "\nLet's start the game \nEvery player should choose a number on the given board to place his symbol \n" <<endl;
@@ -21,7 +22,7 @@ int main() {
 
       cont = false;
       //Ask the player to play his turn
-      player.Play();
+      changePlayer = player.Play();
       // Draw the board on the console
       Game.Draw();
       //check if any of the players is winning
@@ -30,7 +31,13 @@ int main() {
         return 0;
       }
       // switch to the next player
-      player = Game.TogglePlayer(player);
+      if(changePlayer){
+        player = Game.TogglePlayer(player);
+      }
+      else{
+        cout << "number choosen isn't available, this is a symbol, can you try again" << endl;
+      }
+
       // check if we still have empty cells for the game
       cont = Game.EndGame();
 

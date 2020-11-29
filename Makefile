@@ -2,9 +2,9 @@
 all: end
 
 
-TicTacGame: main.o Board.o Player.o
+TicTacGame: main.o Board.o Player.o Cell.o
 	@if [ -e TicTacGame ];  then rm TicTacGame; fi
-	@g++ -o TicTacGame main.o Board.o Player.o   -lglut -lGLU -lGL
+	@g++ -o TicTacGame main.o Board.o Player.o  Cell.o  -lglut -lGLU -lGL
 	@echo "Tic Tac Game generated"
 
 main.o: main.cpp
@@ -18,6 +18,10 @@ Board.o: Structures/Board.cpp Structures/Board.h
 Player.o: Structures/Player.cpp Structures/Player.h
 	@g++ -c Structures/Player.cpp
 	@echo "Player.o generated"
+
+Cell.o: Structures/Cell.cpp Structures/Cell.h
+	@g++ -c Structures/Cell.cpp
+	@echo "Cell.o generated"
 
 
 end: TicTacGame
